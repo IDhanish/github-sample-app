@@ -1,0 +1,38 @@
+name: CI/CD with Email Notification
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+  email-notification:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+      - name: Notify by email
+        uses: cinotify/github-action@main
+        with:
+          to: 'dhanish.ismailharoon@ust.com'
+          subject: 'GitHub Actions Workflow Successful'
+          body: 'The CI/CD workflow completed successfully.'
