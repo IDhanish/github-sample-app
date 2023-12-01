@@ -22,6 +22,6 @@ jobs:
       - name: Notify by email
         uses: cinotify/github-action@main
         with:
-          to: 'dhanish.ismailharoon@ust.com'
+          to: 'sandesh.kandaswamy@ust.com'
           subject: 'GitHub Actions Workflow Successful'
           body: 'The CI/CD workflow completed successfully.'
