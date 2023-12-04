@@ -36,8 +36,12 @@ jobs:
     if: ${{ failure() }}
 
     steps:
-      - name: Save logs to file
-        run: echo "${{ runner.job.outputs['my_job_logs'] }}" >> errors.txt
+      - name: Save errors to file
+        run: |
+          echo "----------------" >> errors.txt
+          echo "Workflow logs:" >> errors.txt
+          echo "----------------" >> errors.txt
+        continue-on-error: true
 
       - name: Notify by email (Build Failure)
         uses: cinotify/github-action@main
