@@ -41,6 +41,7 @@ jobs:
           echo "----------------" >> errors.txt
           echo "Workflow logs:" >> errors.txt
           echo "----------------" >> errors.txt
+          cat $GITHUB_RUN_ID >> errors.txt
         continue-on-error: true
 
       - name: Notify by email (Build Failure)
