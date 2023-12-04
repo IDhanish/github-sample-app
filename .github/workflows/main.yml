@@ -11,7 +11,9 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
 
       # Add your build and test steps here
 
