@@ -53,4 +53,4 @@ jobs:
           to: 'dhanish.ismailharoon@ust.com'
           subject: 'GitHub Actions Build Failure'
           body: 'The Build stage of CI/CD workflow is failed. See attached errors.txt for details.'
-          attachments: errors.txt
+          attachment: errors.txt
