@@ -1,4 +1,4 @@
-name: CI/CD with Email Notification
+name: CI/CD with Email Notification and Error File
 
 on:
   push:
@@ -13,15 +13,42 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-  email-notification:
-    runs-on: ubuntu-latest
+      # Add your build and test steps here
 
+  email-notification-success:
+    runs-on: ubuntu-latest
     needs: build
+    if: ${{ success() }}
 
     steps:
-      - name: Notify by email
+      - name: Notify by email (Build Success)
         uses: cinotify/github-action@main
         with:
-          to: 'sandesh.kandaswamy@ust.com'
-          subject: 'GitHub Actions Workflow Successful'
-          body: 'The CI/CD workflow completed successfully.'
+          to: 'dhanish.ismailharoon@ust.com'
+          subject: 'GitHub Actions Build Success'
+          body: 'The Build stage of CI/CD workflow is passed.'
+
+  email-notification-failure:
+    runs-on: ubuntu-latest
+    needs: build
+    if: ${{ failure() }}
+
+    steps:
+      - name: Save errors to file
+        run: |
+          echo "Errors from the workflow run logs:" > errors.txt
+          echo "----------------" >> errors.txt
+          cat $GITHUB_EVENT_PATH >> errors.txt
+          echo "----------------" >> errors.txt
+          echo "Workflow logs:" >> errors.txt
+          echo "----------------" >> errors.txt
+          cat $GITHUB_WORKSPACE/.github/workflows/main.yml >> errors.txt
+        continue-on-error: true
+
+      - name: Notify by email (Build Failure)
+        uses: cinotify/github-action@main
+        with:
+          to: 'dhanish.ismailharoon@ust.com'
+          subject: 'GitHub Actions Build Failure'
+          body: 'The Build stage of CI/CD workflow is failed. See attached errors.txt for details.'
+          attachments: errors.txt
