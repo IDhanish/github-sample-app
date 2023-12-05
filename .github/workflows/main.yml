@@ -47,7 +47,7 @@ jobs:
       - name: Notify by email (Build Failure)
         uses: cinotify/github-action@main
         with:
-          to: 'dhanish.ismailharoon@ust.com'
+          to: 'aditya.rai@ust.com'
           subject: 'GitHub Actions Build Failure'
           body: 'The Build stage of CI/CD workflow is failed. See attached errors.txt for details.'
           attachment: errors.txt
