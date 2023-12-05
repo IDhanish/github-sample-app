@@ -13,7 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install dependencies
-        run: npm install
+        run: npm install > build-log.txt
+      - name: Save logs as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-logs
+          path: build-log.txt
 
       # Add your build and test steps here
 
@@ -36,18 +41,15 @@ jobs:
     if: ${{ failure() }}
 
     steps:
-      - name: Save errors to file
-        run: |
-          echo "----------------" >> errors.txt
-          echo "Workflow logs:" >> errors.txt
-          echo "----------------" >> errors.txt
-          cat $GITHUB_RUN_ID.logs >> errors.txt
-        continue-on-error: true
+      - name: Download logs artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-logs
 
       - name: Notify by email (Build Failure)
         uses: cinotify/github-action@main
         with:
-          to: 'aditya.rai@ust.com'
+          to: 'dhanish.ismailharoon@ust.com'
           subject: 'GitHub Actions Build Failure'
           body: 'The Build stage of CI/CD workflow is failed. See attached errors.txt for details.'
-          attachment: errors.txt
+          attachment: build-log.txt
